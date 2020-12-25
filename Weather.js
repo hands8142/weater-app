@@ -2,7 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import PropTypes from "prop-types";
 import { LinearGradient } from "expo-linear-gradient";
-import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const weatherOptions = {
   Thunderstorm: {

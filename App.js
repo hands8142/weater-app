@@ -13,21 +13,25 @@ export default class extends React.Component {
     isLoading: true,
   };
   getWeather = async (latitude, longitude) => {
-    const {
-      data: {
-        main: { temp },
-        weather,
+    try {
+      const {
+        data: {
+          main: { temp },
+          weather,
+          name,
+        },
+      } = await axios.get(
+        `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${API_KEY}&units=metric`
+      );
+      this.setState({
+        isLoading: false,
+        condition: weather[0].main,
+        temp,
         name,
-      },
-    } = await axios.get(
-      `http://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&APPID=${API_KEY}&units=metric`
-    );
-    this.setState({
-      isLoading: false,
-      condition: weather[0].main,
-      temp,
-      name,
-    });
+      });
+    } catch (err) {
+      Alert.alert("날씨 정보를 가지고 오는데 실패하였습니다.");
+    }
   };
   getLocation = async () => {
     try {
@@ -51,13 +55,13 @@ export default class extends React.Component {
     } catch (error) {
       Alert.alert("Can't find you.", "So sad");
     }
-  }
+  };
   componentDidMount() {
     this.getLocation();
   }
   render() {
     const { isLoading, temp, condition, name } = this.state;
-    const reload = this.reload
+    const reload = this.reload;
     return isLoading ? (
       <>
         <Loading />
@@ -65,7 +69,12 @@ export default class extends React.Component {
       </>
     ) : (
       <>
-        <Weather temp={Math.round(temp)} condition={condition} name={name} reload={reload} />
+        <Weather
+          temp={Math.round(temp)}
+          condition={condition}
+          name={name}
+          reload={reload}
+        />
         <StatusBar style="auto" />
       </>
     );
